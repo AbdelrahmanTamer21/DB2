@@ -371,16 +371,57 @@ public class Schema4 {
 	 
 	////////////////////////////////////////////////////////// Data Population Methods ////////////////////////////////////////////////////////// 
 	 @SuppressWarnings("deprecation")
-	public static void populateMovie(Connection conn) {
-		 for (int i = 1; i <= 100000; i++) {
+     public static void populateMovie(Connection conn) {
+         Random random = new Random();
+         String[] Langs = {"EN", "FR", "ES", "DE", "IT", "PT", "RU", "JA", "ZH", "AR"};
+         String[] countries = {
+                 "US", // United States
+                 "CA", // Canada
+                 "GB", // United Kingdom
+                 "AU", // Australia
+                 "FR", // France
+                 "DE", // Germany
+                 "JP", // Japan
+                 "IN", // India
+                 "CN", // China
+                 "BR"  // Brazil
+         };
 
-				if (insertMovie(i, "Movie" + i,i, i, "EN", new Date(22,1,1999), "US", conn) == 0) {
-					System.err.println("insertion of record " + i + " failed");
-					break;
-				} else
-					System.out.println("insertion was successful");
-			}
-	 }
+
+         for (int i = 1; i <= 100000; i++) {
+             String movieTitle="";
+             if(i<=222){
+                 movieTitle = "Annie Hall";
+             }else if(i<=223){
+                 movieTitle = "Eyes Wide Shut";
+             }
+             else{
+                 movieTitle = "Movie" + i;
+             }
+
+             int movieYear = 1950 + random.nextInt(71);
+
+             String movieLanguage = Langs[random.nextInt(Langs.length)];
+             Date releaseDate = randomDate(60,random);
+             String country = countries[random.nextInt(countries.length)];
+
+             int randTime =90+ random.nextInt(120);
+
+
+             if (insertMovie(i,movieTitle,movieYear,randTime , movieLanguage, releaseDate,country, conn) == 0) {
+                 System.err.println("insertion of record " + i + " failed");
+                 break;
+             } else
+                 System.out.println("insertion was successful");
+         }
+     }
+
+    private static Date randomDate(int years, Random random) {
+        long millisInYear = 365L * 24 * 60 * 60 * 1000;
+        long currentTime = System.currentTimeMillis();
+        long pastTime = currentTime - (long) (random.nextDouble() * years * millisInYear);
+        return new Date(pastTime);
+    }
 	 
 		public static void populateReviewer(Connection conn) {
 			 for (int i = 1; i < 10000; i++) {
@@ -426,27 +467,51 @@ public class Schema4 {
 						System.out.println("insertion was successful");
 				}
 		 }
-		public static void populateDirector(Connection conn) {
-			 for (int i = 1; i < 10000; i++) {
-                   
-					if (insertDirector(i, "Actor" + i,"Actor" + i, conn) == 0) {
-						System.err.println("insertion of record " + i + " failed");
-						break;
-					} else
-						System.out.println("insertion was successful");
-				}
-		 }
-		
-		public static void populateMovieDirection(Connection conn) {
-			 for (int i = 1; i < 10000; i++) {
+    public static void populateDirector(Connection conn) {
+        Random random = new Random();
+        String[] firstNames = {"Alice", "Bob", "Charlie", "David", "Emma", "Frank", "Grace", "Hannah", "Isaac", "Jessica", "Kevin"};
+        String[] lastNames = {"Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson"};
+        String fName =  firstNames[random.nextInt(firstNames.length)];
+        String lName = lastNames[random.nextInt(lastNames.length)];
+        for (int i = 1; i <= 6000 ; i++) {
+            if(i==1){
+                fName = "Woddy";
+                lName = "Allen";
 
-					if (insertMovieDirection(i, i, conn) == 0) {
-						System.err.println("insertion of record " + i + " failed");
-						break;
-					} else
-						System.out.println("insertion was successful");
-				}
-		 }
+            }else{
+                fName =  firstNames[random.nextInt(firstNames.length)];
+                lName = lastNames[random.nextInt(lastNames.length)];
+            }
+
+            if (insertDirector(i, fName ,lName, conn) == 0) {
+                System.err.println("insertion of record " + i + " failed");
+                break;
+            } else
+                System.out.println("insertion was successful");
+        }
+    }
+
+    public static void populateMovieDirection(Connection conn) {
+        int ID=0;
+Random random = new Random();
+        for (int i = 1; i < 30001; i++) {
+            if(i<351){
+                ID=1;
+            }
+            else{
+                ID=i%6000+1;
+                if(i%6000==0){
+                    ID = random.nextInt(300, 6000);
+                }
+            }
+
+            if (insertMovieDirection(ID, i, conn) == 0) {
+                System.err.println("insertion of record " + i + " failed");
+                break;
+            } else
+                System.out.println("insertion was successful");
+        }
+    }
 		public static void populateMovieCast(Connection conn) {
 			 for (int i = 1; i <= 100000; i++) {
 
@@ -481,15 +546,15 @@ public class Schema4 {
 		 }
 		
 		public static void insertSchema4(Connection connection) {
-//			populateMovie(connection);
-//			populateReviewer(connection);
-//			populateGenres(connection);
+			populateMovie(connection);
+			populateReviewer(connection);
+			populateGenres(connection);
 			populateActor(connection);
-//			populateDirector(connection);
-//			populateMovieDirection(connection);
-//			populateMovieCast(connection);
-//			populateMovieGenres(connection);
-//			populateRating(connection);
+		 populateDirector(connection);
+			populateMovieDirection(connection);
+			populateMovieCast(connection);
+			populateMovieGenres(connection);
+			populateRating(connection);
 		}
 		
 	public static void main(String[] argv) {
