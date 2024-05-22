@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.HashMap;
 
 
 public class Schema2 {
@@ -418,14 +419,27 @@ public class Schema2 {
                     "GROUP BY dnumber;";
 
             // Execute the queries
-            insertSchema2(connection);
-            executeQuery(query2, connection);
-            executeQuery(query3, connection);
-            executeQuery(query4, connection);
-            executeQuery(query5, connection);
-            executeQuery(query6, connection);
+//            insertSchema2(connection);
+//            executeQuery(query2, connection);
+//            executeQuery(query3, connection);
+//            executeQuery(query4, connection);
+//            executeQuery(query5, connection);
+//            executeQuery(query6, connection);
+            System.out.println("Executing query 2 without index");
+            Queries.executeWithNoIndex(query2, connection);
+            System.out.println("Executing query 3 without index");
+            Queries.executeWithNoIndex(query3, connection);
+            System.out.println("Executing query 4 without index");
+            Queries.executeWithNoIndex(query4, connection);
+            System.out.println("Executing query 5 without index");
+            Queries.executeWithNoIndex(query5, connection);
+            System.out.println("Executing query 6 without index");
+            Queries.executeWithNoIndex(query6, connection);
 
-
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("pnumber", "project");
+            System.out.println("Executing query 2 with B+ tree index");
+            Queries.executeWithBTreeIndex(query2, hashMap, connection);
 
 
         } catch (SQLException e) {
