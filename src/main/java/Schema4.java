@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Random;
 
 
 public class Schema4 {
@@ -371,7 +372,7 @@ public class Schema4 {
 	////////////////////////////////////////////////////////// Data Population Methods ////////////////////////////////////////////////////////// 
 	 @SuppressWarnings("deprecation")
 	public static void populateMovie(Connection conn) {
-		 for (int i = 1; i < 10000; i++) {
+		 for (int i = 1; i <= 100000; i++) {
 
 				if (insertMovie(i, "Movie" + i,i, i, "EN", new Date(22,1,1999), "US", conn) == 0) {
 					System.err.println("insertion of record " + i + " failed");
@@ -402,11 +403,23 @@ public class Schema4 {
 				}
 		 }
 		public static void populateActor(Connection conn) {
-			 for (int i = 1; i < 10000; i++) {
-                     String result = "M";
-                     if (i > 5000) 
-                    	 result = "F";
-					if (insertActor(i, "Actor" + i,"Actor" + i,result, conn) == 0) {
+
+            Random random = new Random();
+            String[] firstNames = {"Alice", "Bob", "Charlie", "David", "Emma", "Frank", "Grace", "Hannah", "Isaac", "Jessica", "Kevin"};
+            String[] lastNames = {"Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson"};
+
+
+
+
+			 for (int i = 1; i <= 120000; i++) {
+                 String fName =  firstNames[random.nextInt(firstNames.length)];
+                 String lName = lastNames[random.nextInt(lastNames.length)];
+
+                 String gender = "M";
+
+                     if (i > 60000)
+                    	 gender = "F";
+					if (insertActor(i, fName, lName,gender, conn) == 0) {
 						System.err.println("insertion of record " + i + " failed");
 						break;
 					} else
@@ -435,8 +448,8 @@ public class Schema4 {
 				}
 		 }
 		public static void populateMovieCast(Connection conn) {
-			 for (int i = 1; i < 10000; i++) {
-                  
+			 for (int i = 1; i <= 100000; i++) {
+
 					if (insertMovieCast(i,  i,"Actor" + i, conn) == 0) {
 						System.err.println("insertion of record " + i + " failed");
 						break;
@@ -468,15 +481,15 @@ public class Schema4 {
 		 }
 		
 		public static void insertSchema4(Connection connection) {
-			populateMovie(connection);
-			populateReviewer(connection);
-			populateGenres(connection);
+//			populateMovie(connection);
+//			populateReviewer(connection);
+//			populateGenres(connection);
 			populateActor(connection);
-			populateDirector(connection);
-			populateMovieDirection(connection);
-			populateMovieCast(connection);
-			populateMovieGenres(connection);
-			populateRating(connection);
+//			populateDirector(connection);
+//			populateMovieDirection(connection);
+//			populateMovieCast(connection);
+//			populateMovieGenres(connection);
+//			populateRating(connection);
 		}
 		
 	public static void main(String[] argv) {
@@ -505,7 +518,7 @@ public class Schema4 {
 
 			connection = DriverManager.getConnection(
 					"jdbc:postgresql://127.0.0.1:5432/schema4", "postgres",
-					"YOUR PASSWORd");
+					"1234");
              insertSchema4(connection);
 
 
